@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='indexstyle.css') }}">
+    <title>ACME Car Co. - Price Estimator</title>
+  </head>
+  <body>
+
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">ACME Car Co.</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active" aria-current="page" href="/">Trade-In Value Quote</a>
+            <a class="nav-link" href="/graphs">Data Graphs</a>
+            <a class="nav-link" href="/stats">Statistics</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- End Nav Bar -->
+    <br>
+    <!-- Main content divs-->
+    <!-- Equal width cols, same on all screen sizes -->
+    <div class="container w-100">
+      <div class="row min-vh-100">
+        <!--Left Side -->
+        <div class="col">
+          <br>
+          <br>
+          <h1 id="lblgetEstimate">Get your trade in estimate:</h1>
+          <br>
+          <form>
+            <!--Manufacturer Dropdown-->
+            <div class="form-group">
+              <label for="inputGroupManufacturer"><span>Manufacturer:</span></label>
+              <select class="custom-select" id="inputGroupManufacturer">
+                <option selected>Manufacturer...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+            <!--end Manufacturer Dropdown-->
+            <!--Year Dropdown-->
+            <div class="form-group">
+              <label for="inputGroupYear"><span>Year:</span></label>
+              <select class="custom-select" id="inputGroupYear">
+                <!--Can only be between 5 to 25 years old-->
+                <option selected>Year...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+            <!--end Year Dropdown-->
+            <!--Condition Dropdown-->
+            <div class="form-group">
+              <label for="inputGroupCondition"><span>Condition:</span></label>
+              <select class="custom-select" id="inputGroupCondition">
+                <option selected>Condition...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+            <!--end Condition Dropdown-->
+            <!--Condition Title Status-->
+            <div class="form-group">
+              <label for="inputGroupTitle"><span>Title Status:</span></label>
+              <select class="custom-select" id="inputGroupTitle">
+                <option selected>Title Status...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+            <!--end Condition Title Status-->
+            <!--Condition Cylinder Count-->
+            <div class="form-group">
+              <label for="inputGroupCylinders"><span>Cylinder Count:</span></label>
+              <select class="custom-select" id="inputGroupCylinders">
+                <option selected>Cylinder Count...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+            <!--end Condition Title Status-->
+            <!--Condition Fuel Type-->
+            <div class="form-group">
+              <label for="inputGroupFuel"><span>Cylinder Count:</span></label>
+              <select class="custom-select" id="inputGroupFuel">
+                <option selected>Cylinder Count...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+            </div>
+            <!--end Condition Fuel Type-->
+            <div class="form-group">
+              <label for="formGroupMiles"><span>Mileage (Odometer):</span></label>
+              <input type="text" class="form-control" id="formGroupMiles" placeholder="Miles (Odometer)">
+            </div>
+          </form>
+          <p>About this tool: This tool uses a machine learning algorithm known as "Multiple Linear Regression" to estimate
+          a fair value trade in price for used vehicles. It is trained on a modern dataset provided by Kaggle.com and
+            retrieved from Craigslist.</p>
+        </div>
+        <!--End left side-->
+        <!--Right side-->
+        <div class="col align-self-center h-100" align="center">
+          <h1 hidden="True" id="lblEstimate">Your trade in value estimate:</h1>
+        </div>
+        <!--End right side-->
+      </div>
+    </div>
+    <!-- End main content divs-->
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
