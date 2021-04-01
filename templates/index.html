@@ -44,8 +44,7 @@
             <!--Manufacturer Dropdown-->
             <div class="form-group">
               <label for="inputGroupManufacturer"><span>Manufacturer:</span></label>
-              <select class="custom-select" id="inputGroupManufacturer">
-                <option selected>Manufacturer...</option>
+              <select class="custom-select" id="inputGroupManufacturer" required>
                 {%for manufacturer in manufacturers%}
                 <option value="{{manufacturer}}">{{manufacturer}}</option>
                 {%endfor%}
@@ -55,9 +54,8 @@
             <!--Year Dropdown-->
             <div class="form-group">
               <label for="inputGroupYear"><span>Year:</span></label>
-              <select class="custom-select" id="inputGroupYear">
+              <select class="custom-select" id="inputGroupYear" required>
                 <!--Can only be between 5 to 25 years old-->
-                <option selected>Year...</option>
                 {%for year in years%}
                 <option value="{{year}}">{{year}}</option>
                 {%endfor%}
@@ -67,8 +65,7 @@
             <!--Condition Dropdown-->
             <div class="form-group">
               <label for="inputGroupCondition"><span>Condition:</span></label>
-              <select class="custom-select" id="inputGroupCondition">
-                <option selected>Condition...</option>
+              <select class="custom-select" id="inputGroupCondition" required>
                 {%for condition in conditions%}
                 <option value="{{condition}}">{{condition}}</option>
                 {%endfor%}
@@ -78,8 +75,7 @@
             <!--Condition Title Status-->
             <div class="form-group">
               <label for="inputGroupTitle"><span>Title Status:</span></label>
-              <select class="custom-select" id="inputGroupTitle">
-                <option selected>Title Status...</option>
+              <select class="custom-select" id="inputGroupTitle" required>
                 {%for title in titles%}
                 <option value="{{title}}">{{title}}</option>
                 {%endfor%}
@@ -89,8 +85,7 @@
             <!--Condition Cylinder Count-->
             <div class="form-group">
               <label for="inputGroupCylinders"><span>Cylinder Count:</span></label>
-              <select class="custom-select" id="inputGroupCylinders">
-                <option selected>Cylinder Count...</option>
+              <select class="custom-select" id="inputGroupCylinders" required>
                 {%for cylinder in cylinders%}
                 <option value="{{cylinder}}">{{cylinder}}</option>
                 {%endfor%}
@@ -99,9 +94,8 @@
             <!--end Condition Title Status-->
             <!--Condition Fuel Type-->
             <div class="form-group">
-              <label for="inputGroupFuel"><span>Cylinder Count:</span></label>
-              <select class="custom-select" id="inputGroupFuel">
-                <option selected>Fuel Type</option>
+              <label for="inputGroupFuel"><span>Fuel Type:</span></label>
+              <select class="custom-select" id="inputGroupFuel" required>
                 {%for fuel in fuels%}
                 <option value="{{fuel}}">{{fuel}}</option>
                 {%endfor%}
@@ -110,9 +104,11 @@
             <!--end Condition Fuel Type-->
             <div class="form-group">
               <label for="formGroupMiles"><span>Mileage (Odometer):</span></label>
-              <input type="text" class="form-control" id="formGroupMiles" placeholder="Miles (Odometer)">
+              <input type="text" class="form-control" id="formGroupMiles" placeholder="Miles (Odometer)" required>
             </div>
+            <button type="button" class="btn btn-success">Get My Estimate</button>
           </form>
+          <br>
           <p>About this tool: This tool uses a machine learning algorithm known as "Multiple Linear Regression" to estimate
           a fair value trade in price for used vehicles. It is trained on a modern dataset provided by Kaggle.com and
             retrieved from Craigslist.</p>
