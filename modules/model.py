@@ -85,7 +85,7 @@ def get_dataset():
     #vdata['cylinders'] = vdata[vdata['cylinders'] < 9]
 
     ##Onehot encode necessary stuff
-    vdata = onehot_encode(vdata,['title_status','manufacturer','fuel'],['title','manu','fuel'])
+    vdata = onehot_encode(vdata,['title_status','manufacturer','fuel'],['title','manu','fuel'],False)
 
     ################# End Data-cleaning ##################
 
@@ -94,7 +94,7 @@ def get_dataset():
     return vdata
 
 def get_X(dataset):
-    X = dataset.drop(['price'], axis=1)
+    X = dataset.drop(['price','title_status','manufacturer','fuel'], axis=1) #Skip these columns as not used or using onehot encoding.
 
     scaler = StandardScaler()
 
@@ -102,7 +102,7 @@ def get_X(dataset):
     return X
 
 def get_y(dataset):
-    y = dataset[['price']]
+    y = dataset[['price']] #column predictions target
     return y
 
 def get_trained_model(X,y):
@@ -153,12 +153,16 @@ def get_rmse(model, X_Test,y_test):
     print(f'Mean Square Error = {rMeanSquareE}')
     return rMeanSquareE
 
-def onehot_encode(df, columns, prefixes):
+def get_unique_values(dataset,column):
+    return dataset[column].unique()
+
+def onehot_encode(df, columns, prefixes,drop):
     df = df.copy()
     for column, prefix in zip(columns, prefixes):
         dummies = pandas.get_dummies(df[column], prefix=prefix)
         df = pandas.concat([df, dummies], axis=1)
-        df = df.drop(column, axis=1)
+        if(drop == True):
+            df = df.drop(column, axis=1)
     return df
 
 if __name__ == "__main__":
