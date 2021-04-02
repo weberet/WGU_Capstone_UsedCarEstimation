@@ -5,6 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='indexstyle.css') }}">
@@ -106,7 +111,74 @@
               <label for="formGroupMiles"><span>Mileage (Odometer):</span></label>
               <input type="text" class="form-control" id="formGroupMiles" placeholder="Miles (Odometer)" required>
             </div>
-            <button type="button" class="btn btn-success">Get My Estimate</button>
+              <script>
+
+              $( document ).ready(function() {
+                console.log( "ready!" );
+                var mafield = document.getElementById("inputGroupManufacturer")
+                var yefield = document.getElementById("inputGroupYear")
+                var cofield = document.getElementById("inputGroupCondition")
+                var tifield = document.getElementById("inputGroupTitle")
+                var cyfield = document.getElementById("inputGroupCylinders")
+                var fufield = document.getElementById("inputGroupFuel")
+                var mifield = document.getElementById("formGroupMiles")
+                mafield.value = "toyota"
+                yefield.value = "1998"
+                cofield.value = "fair"
+                tifield.value = "clean"
+                cyfield.value = "4"
+                fufield.value = "gas"
+                mifield.value = "180000"
+              });
+
+              function estimateBTN() {
+                estimatePriceLbl = document.getElementById("estimatedPrice");
+                var ma = document.getElementById("inputGroupManufacturer").value
+                var ye = document.getElementById("inputGroupYear").value
+                var co = document.getElementById("inputGroupCondition").value
+                var ti = document.getElementById("inputGroupTitle").value
+                var cy = document.getElementById("inputGroupCylinders").value
+                var fu = document.getElementById("inputGroupFuel").value
+                var mi = document.getElementById("formGroupMiles").value
+                estimatePriceLbl.style.color = "white";
+
+                var requestData = {"manufacturer": ma,"year": ye,"condition": co,"title": ti,"cylinder": cy,"fuel": fu,"mileage": mi}
+
+                var myHeaders = new Headers();
+                myHeaders.append('Content-Type', 'application/json');
+
+                var myInit = { method: 'POST',
+                               body: JSON.stringify(requestData),
+                               headers: myHeaders,
+                               mode: 'cors',
+                               cache: 'default' };
+
+                const request = new Request('/predict', myInit);
+
+                const url = request.url;
+                const method = request.method;
+                const credentials = request.credentials;
+
+                fetch(request)
+                  .then(response => {
+                    if (response.status === 200) {
+                      return response.json();
+                    } else {
+                      throw new Error('Something went wrong on api server!');
+                    }
+                  })
+                  .then(response => {
+                    console.debug(response);
+                    estimatePriceLbl.style.color = "green";
+                    estimatePriceLbl.innerHTML = response.value
+                  }).catch(error => {
+                    console.error(error);
+                  });
+              }
+
+
+              </script>
+            <button type="button" class="btn btn-success" onclick="estimateBTN()">Get My Estimate</button>
           </form>
           <br>
           <p>About this tool: This tool uses a machine learning algorithm known as "Multiple Linear Regression" to estimate
@@ -116,18 +188,12 @@
         <!--End left side-->
         <!--Right side-->
         <div class="col align-self-center h-100" align="center">
-          <h1 hidden="True" id="lblEstimate">Your trade in value estimate:</h1>
+          <h1 id="lblEstimate">Your trade in value estimate:</h1>
+          <h1 id="estimatedPrice">$0.00</h1>
         </div>
         <!--End right side-->
       </div>
     </div>
     <!-- End main content divs-->
-
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>

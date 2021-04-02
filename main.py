@@ -1,10 +1,15 @@
 from datetime import date
 import modules.model as myModel
 import pandas
+import locale
+import json
 from sklearn.linear_model import LinearRegression
-from flask import Flask, render_template
+from flask import Flask, render_template, request, make_response
 from flask import templating
 app = Flask(__name__)
+
+#Set locale:
+locale.setlocale( locale.LC_ALL, '' )
 
 #Global model creation for start of application
 data = myModel.get_dataset()
@@ -15,8 +20,9 @@ print(f'Manufacturer options:\n {manufacturerOptions}')
 #yearOptions population
 yearOptions = []
 today = date.today()
+thisyear = today.year
 for i in range(5,25):
-    yearOptions.append(today.year - i)
+    yearOptions.append(thisyear - i)
 
 #conditionOptions = myModel.get_unique_values(data,'condition').tolist()
 conditionOptions = ['salvage','fair','good','excellent','like new', 'new']
@@ -47,9 +53,27 @@ def index():
                            titles=titleOptions,cylinders=cylinderOptions,fuels=fuelOptions)
     #return 'Hello, World!'
 
-@app.route('/predict')
+@app.route('/predict', methods=['POST'])
 def predict():
-    return trainedModel.predict([vars])
+
+    recievedJSON = request.get_json()
+    print(f'recieved Data = {recievedJSON}')
+
+    estimation = makePrediction(recievedJSON['manufacturer'],int(recievedJSON['year']),recievedJSON['condition'],
+                                recievedJSON['title'],recievedJSON['cylinder'],recievedJSON['fuel'],
+                                int(recievedJSON['mileage']))
+
+    returnJson = {'value':str(estimation)}
+
+    response = make_response(returnJson, 200)
+    response.mimetype = "application/json"
+
+    print(f'Response = {response}')
+
+    return response
+    #
+    #return returnData, 200, {'Content-Type': 'text/xml; charset=utf-8'}
+    #makePrediction('acura',2011,'excellent','rebuilt',4,'diesel',120000)
 
 @app.route('/graphs')
 def graphs():
@@ -111,12 +135,44 @@ def makePrediction(manufacturer,year,condition,title,cylinder,fuel,mileage):
         'fuel_other': [0],
     }
 
+    #Create single entry dataframe
     predDF = pandas.DataFrame.from_dict(predDictionary)
+
+    #Modify dataframe depending on function input:
+    predDF.at[0, 'manu_'+manufacturer] = 1
+    predDF.at[0, 'age'] = thisyear - year
+    predDF.at[0, 'condition'] = mapCondition(condition)
+    predDF.at[0, 'title_'+title] = 1
+    predDF.at[0, 'cylinders'] = cylinder
+    predDF.at[0, 'fuel_'+fuel] = 1
+    predDF.at[0, 'odometer'] = mileage
     print(f'predDataFrame = \n{predDF}')
+
+    #Make prediction
     aPred = trainedModel.predict(standardScaler.transform(predDF))
     print(f'A Prediction = {aPred[0][0]}')
+    returnString = locale.currency(round(aPred[0][0], 2),grouping=True)
+    return returnString
 
-makePrediction('acura',2016,'salvage','lien',4,'diesel',120000)
+def mapCondition(condition):
+
+    if(condition == 'new'):
+        return 6
+    elif(condition == 'like new'):
+        return 5
+    elif(condition == 'excellent'):
+        return 4
+    elif(condition == 'good'):
+        return 3
+    elif(condition == 'fair'):
+        return 2
+    elif(condition == 'salvage'):
+        return 1
+    else:
+        print('Unrecognized condition, returning None')
+        return None
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=False, use_reloader=False, passthrough_errors=True)
