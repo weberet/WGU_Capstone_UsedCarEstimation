@@ -150,8 +150,8 @@ def makePrediction(manufacturer,year,condition,title,cylinder,fuel,mileage):
 
     #Make prediction
     aPred = trainedModel.predict(standardScaler.transform(predDF))
-    print(f'A Prediction = {aPred[0][0]}')
-    returnString = locale.currency(round(aPred[0][0], 2),grouping=True)
+    print(f'A Prediction = {aPred[0]}') #If standard linear regression index is aPred[0][0]
+    returnString = locale.currency(round(aPred[0], 2),grouping=True) #If standard linear regression index is aPred[0][0]
     return returnString
 
 def mapCondition(condition):

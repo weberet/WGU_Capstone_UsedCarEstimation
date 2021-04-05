@@ -9,7 +9,7 @@ import numpy
 #ML scikitlearn library
 from sklearn import datasets
 from sklearn.svm import SVC
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, PoissonRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, minmax_scale, StandardScaler
@@ -125,7 +125,8 @@ def get_trained_model(X,y):
     print('got here')
 
     print('Training:\n')
-    mlModel = LinearRegression() #create model object
+    #Switching to Poisson from Linear brought RMSE down from 2614.92 to 2281.12
+    mlModel = PoissonRegressor() #create model object #Switched from LinearRegression to PoissonRegressor
     mlModel.fit(X_Train,y_train) #train model object
     return mlModel
 
