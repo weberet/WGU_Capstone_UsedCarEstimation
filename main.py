@@ -1,13 +1,17 @@
 from datetime import date
 import modules.model as myModel
+import modules.modifyReport as modReport
 import pandas
 import locale
+import sweetviz as sv
+import os
 import json
 from sklearn.linear_model import LinearRegression
 from flask import Flask, render_template, request, make_response
 from flask import templating
 app = Flask(__name__)
 
+#region App Startup
 #Set locale:
 locale.setlocale( locale.LC_ALL, '' )
 
@@ -41,17 +45,15 @@ rootMeanError = myModel.get_mean_error(trainedModel,myModel.get_train_split_var(
                              myModel.get_train_split_var(X,y,'y_test'))
 standardScaler = myModel.get_StandardScaler(data)
 
-
-
 #singlePrediction = trainedModel.predict(['acura',4,8,].reshape(1,-1))
 #print(f'Single prediction {singlePrediction}')
 print(f'Root Mean Error for trained model = {rootMeanError}')
+#endregion
 
 @app.route('/')
 def index():
     return render_template('index.html',manufacturers=manufacturerOptions,years=yearOptions,conditions=conditionOptions,
                            titles=titleOptions,cylinders=cylinderOptions,fuels=fuelOptions)
-    #return 'Hello, World!'
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -81,7 +83,28 @@ def graphs():
 
 @app.route('/stats')
 def stats():
-    return 'Stats page'
+    return  render_template('stats.html',numPredictions=5)
+
+@app.route('/genreport') #Generate report code
+def genreport():
+    # region SweetViz Stuff
+    sv.config_parser.read('svOverride.ini') #SweetViz Overrides
+    dfReport = sv.analyze(myModel.get_dataset_forEDA())
+    filedirectory = os.getcwd()
+    templatesString = 'templates'
+    filename = 'svreport.html'
+    dirString = filedirectory + os.sep + templatesString + os.sep + filename
+    dfReport.show_html(filepath=dirString, open_browser="False",layout='widescreen')
+    modReport.processSaveReport() #Custom modifications to report
+    return ('', 204)
+    # endregion
+
+@app.route('/edagraphs') #Generate report code
+def edagraphs():
+    # region SweetViz Stuff
+    return render_template('svreport.html')
+    # endregion
+
 
 def makePrediction(manufacturer,year,condition,title,cylinder,fuel,mileage):
     predDictionary = {
