@@ -22,7 +22,7 @@ from datetime import date
 #Whether to use full or light version of DB (Original DB too big for github and heroku)
 #To use the light version you must have the original turned into the light version using the make_light_csv() function
 #to create a local copy
-uselightDB = False;
+uselightDB = True;
 originalVDBName = 'vehicleDB.csv'
 lightVDBName = 'vehicleDBLight.csv'
 
