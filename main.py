@@ -252,11 +252,11 @@ def estimateEntry(DBfile,manufacturer,year,condition,title,cylinders,fuel,mileag
         filewriter.writerow([manufacturer,year,condition,title,cylinders,fuel,mileage,estimate])
         csvfile.close()
 
-def dummyPredict(man,yea,con,tit,cyl,fue,mil,est): #Dummy prediction method allowing for creation of dummy entries to prevent db not existing with heroku free tier.
+def dummyPredict(man,yea,con,tit,cyl,fue,mil): #Dummy prediction method allowing for creation of dummy entries to prevent db not existing with heroku free tier.
     recievedJSON = request.get_json()
     print(f'recieved Data = {recievedJSON}')
 
-    estimation = makePrediction(man, yea, con, tit, cyl, fue, mil, est)
+    estimation = makePrediction(man, yea, con, tit, cyl, fue, mil)
 
     returnJson = {'value': str(estimation)}
 
@@ -267,7 +267,7 @@ def dummyPredict(man,yea,con,tit,cyl,fue,mil,est): #Dummy prediction method allo
 
     # Entry into csv database
     estimationForDB = str(estimation).replace('"', '').replace('$', '').replace(',', '')
-    estimateEntry(man, int(yea), con, tit, cyl, fue, int(mil), est)
+    estimateEntry(man, int(yea), con, tit, cyl, fue, int(mil), estimationForDB)
     print('Made dummy entry')
 
 if herokuStartupEnabled:
