@@ -140,9 +140,15 @@
                     console.error(error);
                   });
               }
-
-
               </script>
+
+            <script>
+            //Sets nav-link to active for this page.
+            $(document).ready(function () {
+              $('#tradein').addClass('active');
+            });
+            </script>
+
             <button type="button" class="btn btn-success" onclick="estimateBTN()">Get My Estimate</button>
           </form>
           <br>

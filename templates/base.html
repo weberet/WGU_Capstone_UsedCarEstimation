@@ -13,6 +13,19 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='indexstyle.css') }}">
+    <script>
+    $(document).ready(function () {
+        var url = window.location;
+    // Will only work if string in href matches with location
+        $('ul.nav a[href="' + url + '"]').parent().addClass('active');
+
+    // Will also work for relative and absolute hrefs
+        $('ul.nav a').filter(function () {
+            return this.href == url;
+        }).parent().addClass('active').parent().parent().addClass('active');
+    });
+    </script>
+
     <title>{% block title %}ACME Car Co. - Price Estimator{% endblock %}</title>
   </head>
   <body>
@@ -25,10 +38,10 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page" href="/">Trade-In Value Quote</a>
-          <a class="nav-link" href="/edagraphs">Data Graphs</a>
-          <a class="nav-link" href="/stats">App Stats</a>
-          <a class="nav-link" href="/genreport">Regenerate Reports</a>
+          <a class="nav-link" id="tradein" aria-current="page" href="/">Trade-In Value Quote</a>
+          <a class="nav-link" id="datagraphs" href="/edagraphs">Data Graphs</a>
+          <a class="nav-link" id="appstats" href="/stats">App Stats</a>
+          <a class="nav-link" id="regeneratereports" href="/genreport">Regenerate Reports</a>
         </div>
       </div>
     </nav>

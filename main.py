@@ -5,6 +5,7 @@ import pandas
 import locale
 import sweetviz as sv
 import os
+import csv
 import json
 from sklearn.linear_model import LinearRegression
 from flask import Flask, render_template, request, make_response
@@ -50,6 +51,8 @@ standardScaler = myModel.get_StandardScaler(data)
 print(f'Root Mean Error for trained model = {rootMeanError}')
 #endregion
 
+estimateDBFile = 'estimateDB.csv'
+
 @app.route('/')
 def index():
     return render_template('index.html',manufacturers=manufacturerOptions,years=yearOptions,conditions=conditionOptions,
@@ -72,6 +75,12 @@ def predict():
 
     print(f'Response = {response}')
 
+    #Entry into csv database
+    estimationForDB = str(estimation).replace('"','').replace('$','').replace(',','')
+    estimateEntry(estimateDBFile,manufacturer=recievedJSON['manufacturer'],year=int(recievedJSON['year']),
+                  condition=recievedJSON['condition'],title=recievedJSON['title'],cylinders=recievedJSON['cylinder'],
+                  fuel=recievedJSON['fuel'],mileage=int(recievedJSON['mileage']),estimate=estimationForDB)
+
     return response
     #
     #return returnData, 200, {'Content-Type': 'text/xml; charset=utf-8'}
@@ -83,7 +92,35 @@ def graphs():
 
 @app.route('/stats')
 def stats():
-    return  render_template('stats.html',numPredictions=5)
+    #Read the estimation CSV Database to pandas dataframe
+    estimateDF = pandas.read_csv(estimateDBFile)
+    n = 1 #Get only top result guessed, adjust this to get more results for lines using n
+
+    #variable assignment
+    statnumPredictions = len(estimateDF.index)
+    statmanufacturer = estimateDF["manufacturer"].value_counts()[:n].index.tolist()[0]
+    statyear = estimateDF["year"].mean()
+    statcondition = estimateDF["condition"].value_counts()[:n].index.tolist()[0]
+    stattitle = estimateDF["title"].value_counts()[:n].index.tolist()[0]
+    statcylinders = estimateDF["cylinders"].value_counts()[:n].index.tolist()[0]
+    statfuel = estimateDF["fuel"].value_counts()[:n].index.tolist()[0]
+    statmileage = estimateDF["mileage"].mean()
+    statestimation = estimateDF["estimate"].mean()
+
+    print(f'Number of estimations calculated with this tool: {statnumPredictions}')
+    print(f'Top guessed car manufacturer: {statmanufacturer}')
+    print(f'Average year of estimated vehicles: {statyear}')
+    print(f'Most common condition of user vehicle: {statcondition}')
+    print(f'Most common title of user vehicle: {stattitle}')
+    print(f'Most common number of cylinders in user vehicle: {statcylinders}')
+    print(f'Most common fuel type among estimated vehicles: {statfuel}')
+    print(f'Average mileage of estimated vehicles: {statmileage}')
+    print(f'Average price estimation of vehicles: {statestimation}')
+
+    return  render_template('stats.html',statnumPredictions=statnumPredictions,statmanufacturer=statmanufacturer,
+                            statyear=statyear,statcondition=statcondition,stattitle=stattitle,
+                            statcylinders=statcylinders,statfuel=statfuel,statmileage=statmileage,
+                            statestimation=statestimation)
 
 @app.route('/genreport') #Generate report code
 def genreport():
@@ -195,7 +232,20 @@ def mapCondition(condition):
         print('Unrecognized condition, returning None')
         return None
 
+def checkDBExist(DBfile):
+    if not os.path.isfile(DBfile):
+        print("DBfile CSV doesn't exist, creating")
+        with open(DBfile, 'w+') as csvfile:
+            filewriter = csv.writer(csvfile, delimiter=',', lineterminator = '\n')
+            filewriter.writerow(['manufacturer', 'year','condition','title','cylinders','fuel','mileage','estimate'])
+            csvfile.close()
 
+def estimateEntry(DBfile,manufacturer,year,condition,title,cylinders,fuel,mileage,estimate):
+    checkDBExist(estimateDBFile)
+    with open(DBfile, 'a') as csvfile:
+        filewriter = csv.writer(csvfile, delimiter=',', lineterminator = '\n')
+        filewriter.writerow([manufacturer,year,condition,title,cylinders,fuel,mileage,estimate])
+        csvfile.close()
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=False, use_reloader=False, passthrough_errors=True)

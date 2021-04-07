@@ -14,6 +14,12 @@ def processSaveReport():
     except:
         print(f"Couldn't parse report at location: {svreportLocation}")
 
+    navUpdateString = """
+        //Sets nav-link to active for this page.
+        $(document).ready(function () {
+          $('#datagraphs').addClass('active');
+        });
+    """
     insertTopString = "{% extends 'base.html' %}\n{% block content %}"
     insertBottomString = "{% endblock %}"
 
@@ -32,6 +38,13 @@ def processSaveReport():
 
     soup.insert(0,insertTopString)
     soup.insert(len(soup)+1, insertBottomString)
+
+    #script insert
+    scriptTag = soup.new_tag('script')
+    scriptTag.append(navUpdateString)
+    #soup.body.insert(len(soup.body.contents), navUpdateString)
+    head = soup.find('head')
+    head.insert(1,scriptTag)
 
     #print(soup.prettify())
     writeFile(svreportLocation,soup)
