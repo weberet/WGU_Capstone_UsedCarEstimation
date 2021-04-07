@@ -12,6 +12,9 @@ from flask import Flask, render_template, request, make_response
 from flask import templating
 app = Flask(__name__)
 
+herokuStartupEnabled = True #Variable that makes app more compatible with heroku free tier
+
+
 #region App Startup
 #Set locale:
 locale.setlocale( locale.LC_ALL, '' )
@@ -26,7 +29,7 @@ print(f'Manufacturer options:\n {manufacturerOptions}')
 yearOptions = []
 today = date.today()
 thisyear = today.year
-for i in range(5,25):
+for i in range(0,25):
     yearOptions.append(thisyear - i)
 
 #conditionOptions = myModel.get_unique_values(data,'condition').tolist()
@@ -52,7 +55,8 @@ print(f'Root Mean Error for trained model = {rootMeanError}')
 #endregion
 
 estimateDBFile = 'estimateDB.csv'
-#myModel.make_light_csv() Run this line while original CSV is available to create a light version for upload
+#Run below line while original CSV is available to create a light version for upload to heroku / github
+#myModel.make_light_csv()
 
 @app.route('/')
 def index():
@@ -247,6 +251,28 @@ def estimateEntry(DBfile,manufacturer,year,condition,title,cylinders,fuel,mileag
         filewriter = csv.writer(csvfile, delimiter=',', lineterminator = '\n')
         filewriter.writerow([manufacturer,year,condition,title,cylinders,fuel,mileage,estimate])
         csvfile.close()
+
+def dummyPredict(man,yea,con,tit,cyl,fue,mil,est): #Dummy prediction method allowing for creation of dummy entries to prevent db not existing with heroku free tier.
+    recievedJSON = request.get_json()
+    print(f'recieved Data = {recievedJSON}')
+
+    estimation = makePrediction(man, yea, con, tit, cyl, fue, mil, est)
+
+    returnJson = {'value': str(estimation)}
+
+    response = make_response(returnJson, 200)
+    response.mimetype = "application/json"
+
+    print(f'Response = {response}')
+
+    # Entry into csv database
+    estimationForDB = str(estimation).replace('"', '').replace('$', '').replace(',', '')
+    estimateEntry(man, int(yea), con, tit, cyl, fue, int(mil), est)
+    print('Made dummy entry')
+
+if herokuStartupEnabled:
+    dummyPredict('toyota','1998','fair','clean','4','gas','180000')
+    genreport() #Create EDA reports so that the exist on heroku free tier without clicking regenerate
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=False, use_reloader=False, passthrough_errors=True)

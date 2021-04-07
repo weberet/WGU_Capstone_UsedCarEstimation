@@ -20,7 +20,9 @@ from datetime import date
 #Right now these three methods are essentially the same with different end results.
 
 #Whether to use full or light version of DB (Original DB too big for github and heroku)
-uselightDB = True;
+#To use the light version you must have the original turned into the light version using the make_light_csv() function
+#to create a local copy
+uselightDB = False;
 originalVDBName = 'vehicleDB.csv'
 lightVDBName = 'vehicleDBLight.csv'
 
@@ -80,7 +82,7 @@ def get_dataset():
 
     #Outliers yearwise removal
     vdata = vdata[vdata['age'] < 25]
-    vdata = vdata[vdata['age'] > 5]
+    #vdata = vdata[vdata['age'] > 5]
 
     #Outliers odometer removal
     vdata = vdata[vdata['odometer'] < 225000]
@@ -171,7 +173,7 @@ def make_light_csv():
 
     # Outliers yearwise removal
     vdata = vdata[vdata['age'] < 25]
-    vdata = vdata[vdata['age'] > 5]
+    #vdata = vdata[vdata['age'] > 5]
 
     # Outliers odometer removal
     vdata = vdata[vdata['odometer'] < 225000]
@@ -251,7 +253,7 @@ def get_dataset_forEDA():
 
     #Outliers yearwise removal
     vdata = vdata[vdata['age'] < 25]
-    vdata = vdata[vdata['age'] > 5]
+    #vdata = vdata[vdata['age'] > 5]
 
     #Outliers odometer removal
     vdata = vdata[vdata['odometer'] < 225000]
