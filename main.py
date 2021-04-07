@@ -270,9 +270,22 @@ def dummyPredict(man,yea,con,tit,cyl,fue,mil): #Dummy prediction method allowing
     estimateEntry(man, int(yea), con, tit, cyl, fue, int(mil), estimationForDB)
     print('Made dummy entry')
 
+def dummyGenReport(): #Method for initial creation of reports on platforms like heroku
+    # region SweetViz Stuff
+    sv.config_parser.read('svOverride.ini') #SweetViz Overrides
+    dfReport = sv.analyze(myModel.get_dataset_forEDA())
+    filedirectory = os.getcwd()
+    templatesString = 'templates'
+    filename = 'svreport.html'
+    dirString = filedirectory + os.sep + templatesString + os.sep + filename
+    dfReport.show_html(filepath=dirString, open_browser="False",layout='widescreen')
+    modReport.processSaveReport() #Custom modifications to report
+    # endregion
+
 if herokuStartupEnabled:
     dummyPredict('toyota','1998','fair','clean','4','gas','180000')
-    genreport() #Create EDA reports so that the exist on heroku free tier without clicking regenerate
+    dummyGenReport() #Create EDA reports so that the exist on heroku free tier without clicking regenerate
+
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=False, use_reloader=False, passthrough_errors=True)
