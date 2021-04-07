@@ -89,7 +89,8 @@ def get_dataset():
 
     #Cylinders to ints
     vdata['cylinders'] = vdata['cylinders'].replace('other', numpy.NaN)
-    vdata['cylinders'] = vdata['cylinders'].str.extract('(\d+)', expand=False)
+    if not uselightDB:
+        vdata['cylinders'] = vdata['cylinders'].str.extract('(\d+)', expand=False)
 
     #Drop NaN values
     vdata = vdata.dropna()
@@ -259,7 +260,8 @@ def get_dataset_forEDA():
 
     #Cylinders to ints
     vdata['cylinders'] = vdata['cylinders'].replace('other', numpy.NaN)
-    vdata['cylinders'] = vdata['cylinders'].str.extract('(\d+)', expand=False)
+    if not uselightDB:
+        vdata['cylinders'] = vdata['cylinders'].str.extract('(\d+)', expand=False)
 
     #Drop NaN values
     vdata = vdata.dropna()
