@@ -20,7 +20,7 @@ from datetime import date
 #Right now these three methods are essentially the same with different end results.
 
 #Whether to use full or light version of DB (Original DB too big for github and heroku)
-uselightDB = False;
+uselightDB = True;
 originalVDBName = 'vehicleDB.csv'
 lightVDBName = 'vehicleDBLight.csv'
 
