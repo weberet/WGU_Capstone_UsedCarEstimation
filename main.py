@@ -273,7 +273,7 @@ def dummyGenReport(): #Method for initial creation of reports on platforms like 
     # endregion
 
 if herokuStartupEnabled:
-    dummyPredict('toyota','1998','fair','clean','4','gas','180000')
+    dummyPredict('toyota',1998,'fair','clean',4,'gas',180000)
     dummyGenReport() #Create EDA reports so that the exist on heroku free tier without clicking regenerate
 
 
