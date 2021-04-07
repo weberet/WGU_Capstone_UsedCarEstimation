@@ -246,18 +246,18 @@ def checkDBExist(DBfile):
             csvfile.close()
 
 def estimateEntry(DBfile,manufacturer,year,condition,title,cylinders,fuel,mileage,estimate):
-    checkDBExist(estimateDBFile)
+    checkDBExist(DBfile)
     with open(DBfile, 'a') as csvfile:
         filewriter = csv.writer(csvfile, delimiter=',', lineterminator = '\n')
         filewriter.writerow([manufacturer,year,condition,title,cylinders,fuel,mileage,estimate])
         csvfile.close()
 
-def dummyPredict(man,yea,con,tit,cyl,fue,mil): #Dummy prediction method allowing for creation of dummy entries to prevent db not existing with heroku free tier.
+def dummyPredict(DBfile,man,yea,con,tit,cyl,fue,mil): #Dummy prediction method allowing for creation of dummy entries to prevent db not existing with heroku free tier.
     estimation = makePrediction(man, yea, con, tit, cyl, fue, mil)
 
     # Entry into csv database
     estimationForDB = str(estimation).replace('"', '').replace('$', '').replace(',', '')
-    estimateEntry(man, int(yea), con, tit, cyl, fue, int(mil), estimationForDB)
+    estimateEntry(DBfile,man, int(yea), con, tit, cyl, fue, int(mil), estimationForDB)
     print('Made dummy entry')
 
 def dummyGenReport(): #Method for initial creation of reports on platforms like heroku
@@ -273,7 +273,7 @@ def dummyGenReport(): #Method for initial creation of reports on platforms like 
     # endregion
 
 if herokuStartupEnabled:
-    dummyPredict('toyota',1998,'fair','clean',4,'gas',180000)
+    dummyPredict(estimateDBFile,'toyota',1998,'fair','clean',4,'gas',180000)
     dummyGenReport() #Create EDA reports so that the exist on heroku free tier without clicking regenerate
 
 
