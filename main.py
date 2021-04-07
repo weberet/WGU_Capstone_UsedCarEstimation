@@ -52,6 +52,7 @@ print(f'Root Mean Error for trained model = {rootMeanError}')
 #endregion
 
 estimateDBFile = 'estimateDB.csv'
+#myModel.make_light_csv() Run this line while original CSV is available to create a light version for upload
 
 @app.route('/')
 def index():
