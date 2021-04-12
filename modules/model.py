@@ -311,7 +311,7 @@ def get_trained_model(X,y):
     print('Training:\n')
     #Switching to Poisson from Linear brought RMSE down from 2614.92 to 2281.12
     mlModel = PoissonRegressor() #create model object #Switched from LinearRegression to PoissonRegressor
-    mlModel.fit(X_Train,y_train) #train model object
+    mlModel.fit(X_Train,y_train.values.ravel()) #train model object
     return mlModel
 
 def get_train_split_var(X,y,which):

@@ -10,17 +10,37 @@ import json
 from sklearn.linear_model import LinearRegression
 from flask import Flask, render_template, request, make_response
 from flask import templating
+import pickle
 app = Flask(__name__)
 
 herokuStartupEnabled = True #Variable that makes app more compatible with heroku free tier
 
+useSavedModel = False
+modelfilename = 'trained_model.sav'
 
-#region App Startup
 #Set locale:
 locale.setlocale( locale.LC_ALL, '' )
 
-#Global model creation for start of application
-data = myModel.get_dataset()
+if not useSavedModel:
+    #region Model Train
+    #Global model creation for start of application
+    data = myModel.get_dataset()
+    X = myModel.get_X(data)
+    y = myModel.get_y(data)
+    trainedModel = myModel.get_trained_model(X,y)
+    rootMeanError = myModel.get_mean_error(trainedModel,myModel.get_train_split_var(X,y,'X_Test'),
+                                 myModel.get_train_split_var(X,y,'y_test'))
+    standardScaler = myModel.get_StandardScaler(data)
+
+    #singlePrediction = trainedModel.predict(['acura',4,8,].reshape(1,-1))
+    #print(f'Single prediction {singlePrediction}')
+    print(f'Root Mean Error for trained model = {rootMeanError}')
+    print(f'Saving ML model...')
+    pickle.dump(trainedModel, open(modelfilename, 'wb+'))
+    #endregion
+else:
+    trainedModel = pickle.load(open(modelfilename, 'rb'))
+
 #region Menu Options
 manufacturerOptions = sorted(myModel.get_unique_values(data,'manufacturer').tolist())
 print(f'Manufacturer options:\n {manufacturerOptions}')
@@ -41,17 +61,6 @@ print(titleOptions)
 print(f'Unique cylinder options = {myModel.get_unique_values(data,"cylinders").tolist()}')
 cylinderOptions = [3,4,5,6,8]
 fuelOptions = myModel.get_unique_values(data,'fuel').tolist()
-#endregion
-X = myModel.get_X(data)
-y = myModel.get_y(data)
-trainedModel = myModel.get_trained_model(X,y)
-rootMeanError = myModel.get_mean_error(trainedModel,myModel.get_train_split_var(X,y,'X_Test'),
-                             myModel.get_train_split_var(X,y,'y_test'))
-standardScaler = myModel.get_StandardScaler(data)
-
-#singlePrediction = trainedModel.predict(['acura',4,8,].reshape(1,-1))
-#print(f'Single prediction {singlePrediction}')
-print(f'Root Mean Error for trained model = {rootMeanError}')
 #endregion
 
 estimateDBFile = 'estimateDB.csv'
@@ -274,7 +283,8 @@ def dummyGenReport(): #Method for initial creation of reports on platforms like 
 
 if herokuStartupEnabled:
     dummyPredict(estimateDBFile,'toyota',1998,'fair','clean',4,'gas',180000)
-    dummyGenReport() #Create EDA reports so that the exist on heroku free tier without clicking regenerate
+    #dummyGenReport() #Create EDA reports so that the exist on heroku free tier without clicking regenerate
+    #dummy reports take to long to generate with heroku timeout request, serve up pregenerated with option to regen.
 
 
 if __name__ == '__main__':
