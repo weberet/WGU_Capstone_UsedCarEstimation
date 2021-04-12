@@ -71,7 +71,8 @@ estimateDBFile = 'estimateDB.csv'
 
 
 # Run below line while original CSV is available to create a light version for upload to heroku / github
-# myModel.make_light_csv()
+if not myModel.uselightDB: #Makes light version of db for future use if original is being used. Mainly for heroku / github
+    myModel.make_light_csv()
 
 @app.route('/')
 def index():
