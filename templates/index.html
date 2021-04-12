@@ -21,6 +21,16 @@
               </select>
             </div>
             <!--end Manufacturer Dropdown-->
+            <!--Type Dropdown-->
+            <div class="form-group">
+              <label for="inputGroupType"><span>Manufacturer:</span></label>
+              <select class="custom-select" id="inputGroupType" required>
+                {%for t in type%}
+                <option value="{{t}}">{{t}}</option>
+                {%endfor%}
+              </select>
+            </div>
+            <!--end Type Dropdown-->
             <!--Year Dropdown-->
             <div class="form-group">
               <label for="inputGroupYear"><span>Year:</span></label>
@@ -81,6 +91,7 @@
               $( document ).ready(function() {
                 console.log( "ready!" );
                 var mafield = document.getElementById("inputGroupManufacturer")
+                var tyfield = document.getElementById("inputGroupType")
                 var yefield = document.getElementById("inputGroupYear")
                 var cofield = document.getElementById("inputGroupCondition")
                 var tifield = document.getElementById("inputGroupTitle")
@@ -88,6 +99,7 @@
                 var fufield = document.getElementById("inputGroupFuel")
                 var mifield = document.getElementById("formGroupMiles")
                 mafield.value = "toyota"
+                tyfield.value = "sedan"
                 yefield.value = "1998"
                 cofield.value = "fair"
                 tifield.value = "clean"
@@ -99,6 +111,7 @@
               function estimateBTN() {
                 estimatePriceLbl = document.getElementById("estimatedPrice");
                 var ma = document.getElementById("inputGroupManufacturer").value
+                var ty = document.getElementById("inputGroupType").value
                 var ye = document.getElementById("inputGroupYear").value
                 var co = document.getElementById("inputGroupCondition").value
                 var ti = document.getElementById("inputGroupTitle").value
@@ -107,7 +120,7 @@
                 var mi = document.getElementById("formGroupMiles").value
                 estimatePriceLbl.style.color = "white";
 
-                var requestData = {"manufacturer": ma,"year": ye,"condition": co,"title": ti,"cylinder": cy,"fuel": fu,"mileage": mi}
+                var requestData = {"manufacturer": ma,"type": ty,"year": ye,"condition": co,"title": ti,"cylinder": cy,"fuel": fu,"mileage": mi}
 
                 var myHeaders = new Headers();
                 myHeaders.append('Content-Type', 'application/json');

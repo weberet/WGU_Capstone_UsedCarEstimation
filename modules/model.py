@@ -22,7 +22,7 @@ from datetime import date
 #Whether to use full or light version of DB (Original DB too big for github and heroku)
 #To use the light version you must have the original turned into the light version using the make_light_csv() function
 #to create a local copy
-uselightDB = True;
+uselightDB = False;
 originalVDBName = 'vehicleDB.csv'
 lightVDBName = 'vehicleDBLight.csv'
 
@@ -38,7 +38,7 @@ def get_dataset():
     datafile = filedirectory+os.sep+filename
 
     #New code using only optimized columns
-    vdata = pandas.read_csv(datafile,usecols=['price','year','manufacturer','condition','odometer','title_status', 'cylinders','fuel'])
+    vdata = pandas.read_csv(datafile,usecols=['price','year','manufacturer','type','condition','odometer','title_status', 'cylinders','fuel'])
     #Columns used: price, age, manufacturer, model, condition, odometer, title_status, cylinders, fuel
 
     print(vdata.dtypes)
@@ -106,7 +106,7 @@ def get_dataset():
     #vdata = vdata[vdata.manufacturer != 'harley-davidson']
 
     ##Onehot encode necessary stuff
-    vdata = onehot_encode(vdata,['title_status','manufacturer','fuel'],['title','manu','fuel'],False)
+    vdata = onehot_encode(vdata,['title_status','manufacturer','fuel','type'],['title','manu','fuel','type'],False)
 
     ################# End Data-cleaning ##################
 
@@ -128,7 +128,7 @@ def make_light_csv():
 
     # New code using only optimized columns
     vdata = pandas.read_csv(datafile,
-                            usecols=['price', 'year', 'manufacturer', 'condition', 'odometer', 'title_status',
+                            usecols=['price', 'year', 'manufacturer', 'type', 'condition', 'odometer', 'title_status',
                                      'cylinders', 'fuel'])
     # Columns used: price, age, manufacturer, model, condition, odometer, title_status, cylinders, fuel
 
@@ -210,7 +210,7 @@ def get_dataset_forEDA():
     datafile = filedirectory+os.sep+filename
 
     #New code using only optimized columns
-    vdata = pandas.read_csv(datafile,usecols=['price','year','manufacturer','condition','odometer','title_status', 'cylinders','fuel'])
+    vdata = pandas.read_csv(datafile,usecols=['price','year','manufacturer', 'type','condition','odometer','title_status', 'cylinders','fuel'])
     #Columns used: price, age, manufacturer, model, condition, odometer, title_status, cylinders, fuel
 
     print(vdata.dtypes)
@@ -283,7 +283,7 @@ def get_dataset_forEDA():
     return vdata
 
 def get_X(dataset):
-    X = dataset.drop(['price','title_status','manufacturer','fuel'], axis=1) #Skip these columns as not used or using onehot encoding.
+    X = dataset.drop(['price','title_status','manufacturer','fuel', 'type'], axis=1) #Skip these columns as not used or using onehot encoding.
 
     scaler = get_StandardScaler(dataset)
     print(f'X = {X}')
@@ -292,8 +292,12 @@ def get_X(dataset):
     return X
 
 def get_StandardScaler(dataset):
-    X = dataset.drop(['price','title_status','manufacturer','fuel'], axis=1) #Skip these columns as not used or using onehot encoding.
-
+    print('printing dataset for standard scaler')
+    print(dataset)
+    print(f'Pre Split shape: {dataset.shape}')
+    X = dataset.drop(['price','title_status','manufacturer','fuel','type'], axis=1) #Skip these columns as not used or using onehot encoding.
+    print(f'X shape: {X.shape}')
+    print(f'Dataset after: {X}')
     scaler = StandardScaler()
 
     scaler.fit_transform(X)
