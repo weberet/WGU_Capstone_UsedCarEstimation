@@ -29,13 +29,20 @@ if not useSavedModel:
     X = myModel.get_X(data)
     y = myModel.get_y(data)
     trainedModel = myModel.get_trained_model(X, y)
-    rootMeanError = myModel.get_mean_error(trainedModel, myModel.get_train_split_var(X, y, 'X_Test'),
+    meanAbsoluteError = myModel.get_mean_error(trainedModel, myModel.get_train_split_var(X, y, 'X_Test'),
+                                           myModel.get_train_split_var(X, y, 'y_test'))
+    rootMeanSquaredError = myModel.get_rmse(trainedModel, myModel.get_train_split_var(X, y, 'X_Test'),
+                                           myModel.get_train_split_var(X, y, 'y_test'))
+
+    r2 = myModel.get_r2(trainedModel, myModel.get_train_split_var(X, y, 'X_Test'),
                                            myModel.get_train_split_var(X, y, 'y_test'))
     standardScaler = myModel.get_StandardScaler(data)
 
     # singlePrediction = trainedModel.predict(['acura',4,8,].reshape(1,-1))
     # print(f'Single prediction {singlePrediction}')
-    print(f'Root Mean Error for trained model = {rootMeanError}')
+    print(f'Mean Absolute  for trained model = {meanAbsoluteError}')
+    print(f'Root Mean Squared Error for trained model = {rootMeanSquaredError}')
+    print(f'R2 for trained model = {r2}')
     print(f'Saving ML model...')
     pickle.dump(trainedModel, open(modelfilename, 'wb+'))
     # endregion

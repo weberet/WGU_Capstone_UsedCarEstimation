@@ -60,7 +60,6 @@ def get_dataset():
     ############## End Data-encoding #################
 
     ################# Data-cleaning ##################
-
     #Drop NaN values
     vdata = vdata.dropna()
 
@@ -107,7 +106,6 @@ def get_dataset():
 
     ##Onehot encode necessary stuff
     vdata = onehot_encode(vdata,['title_status','manufacturer','fuel','type'],['title','manu','fuel','type'],False)
-
     ################# End Data-cleaning ##################
 
     print(vdata.dtypes)
