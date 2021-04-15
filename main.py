@@ -131,6 +131,7 @@ def stats():
     # variable assignment
     statnumPredictions = len(estimateDF.index)
     statmanufacturer = estimateDF["manufacturer"].value_counts()[:n].index.tolist()[0]
+    stattype = estimateDF["type"].value_counts()[:n].index.tolist()[0]
     statyear = estimateDF["year"].mean()
     statcondition = estimateDF["condition"].value_counts()[:n].index.tolist()[0]
     stattitle = estimateDF["title"].value_counts()[:n].index.tolist()[0]
@@ -140,7 +141,8 @@ def stats():
     statestimation = estimateDF["estimate"].mean()
 
     print(f'Number of estimations calculated with this tool: {statnumPredictions}')
-    print(f'Top guessed car manufacturer: {statmanufacturer}')
+    print(f'Top guessed vehicle manufacturer: {statmanufacturer}')
+    print(f'Top guessed vehicle type: {stattype}')
     print(f'Average year of estimated vehicles: {statyear}')
     print(f'Most common condition of user vehicle: {statcondition}')
     print(f'Most common title of user vehicle: {stattitle}')
@@ -150,7 +152,7 @@ def stats():
     print(f'Average price estimation of vehicles: {statestimation}')
 
     return render_template('stats.html', statnumPredictions=statnumPredictions, statmanufacturer=statmanufacturer,
-                           statyear=statyear, statcondition=statcondition, stattitle=stattitle,
+                           stattype=stattype, statyear=statyear, statcondition=statcondition, stattitle=stattitle,
                            statcylinders=statcylinders, statfuel=statfuel, statmileage=statmileage,
                            statestimation=statestimation)
 
