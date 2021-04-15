@@ -3,7 +3,7 @@
     {% block content %}
     <!-- Equal width cols, same on all screen sizes -->
     <div class="container w-100">
-      <div class="row min-vh-100">
+      <div class="row min-vh-90">
         <!--Left Side -->
         <div class="col">
           <br>
@@ -165,16 +165,31 @@
             <button type="button" class="btn btn-success" onclick="estimateBTN()">Get My Estimate</button>
           </form>
           <br>
-          <p>About this tool: This tool uses a machine learning algorithm known as "Multiple Linear Regression" to estimate
-          a fair value trade in price for used vehicles. It is trained on a modern dataset provided by Kaggle.com and
-            retrieved from Craigslist.</p>
         </div>
         <!--End left side-->
         <!--Right side-->
-        <div class="col align-self-center h-100" align="center">
-          <h1 id="lblEstimate">Your trade in value estimate:</h1>
-          <h1 id="estimatedPrice">$0.00</h1>
-        </div>
+        <div class="col min-vh-90">
+        <table style="height: 100%;">
+            <tr style="height: 40%;">
+              <td style="text-align: right; vertical-align: bottom;">
+                <h1 id="lblEstimate">Your trade in value estimate:</h1>
+                <h1 id="estimatedPrice">$0.00</h1>
+              </td>
+            </tr>
+            <tr style="height: 30%;">
+              <td style="vertical-align: bottom; text-align: left;">
+                <p><b><u>About this tool</u></b><br>This tool uses a machine learning algorithm known as "Poisson Regression" to estimate
+                  a fair value trade in price for used vehicles. This tool is trained on a used vehicle sales dataset found at
+                  Kaggle.com and that was created by scraping publicly available vehicle sale listings Craigslist. The full dataset is
+                  available <b><u><a href="https://www.kaggle.com/austinreese/craigslist-carstrucks-data">here.</a></u></b></p>
+                <p>This web application is powered by <b><u><a href="https://flask.palletsprojects.com/en/1.1.x/">Flask,</a></u></b> a web framework for Python.</p>
+                <br>
+                <br>
+                <br>
+              </td>
+            </tr>
+          </table>
+          </div>
         <!--End right side-->
       </div>
     </div>
