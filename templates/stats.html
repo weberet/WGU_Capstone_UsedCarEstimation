@@ -12,16 +12,19 @@ $(document).ready(function () {
   <div class="row min-vh-100">
     <table width=100% height=100% cellpadding="15" style="color: black;">
       <tr><th bgcolor="#343a40"><h1>Stat</h1></th><th bgcolor="#343a40"><h1>Value</h1></th></tr>
-      <tr bgcolor="#FFF"><td><h3>Number of estimations calculated with this tool:</h3></td><td><h3>{{statnumPredictions}}</h3></td></tr>
-      <tr bgcolor="#D9D9D9"><td><h3>Top estimated car manufacturer:</h3></td><td><h3>{{statmanufacturer}}</h3></td></tr>
-      <tr bgcolor="#FFF"><td><h3>Top estimated type of vehicle:</h3></td><td><h3>{{stattype}}</h3></td></tr>
-      <tr bgcolor="#D9D9D9"><td><h3>Average year of estimated vehicles:</h3></td><td><h3>{{statyear}}</h3></td></tr>
-      <tr bgcolor="#FFF"><td><h3>Most common condition of estimated user vehicle:</h3></td><td><h3>{{statcondition}}</h3></td></tr>
-      <tr bgcolor="#D9D9D9"><td><h3>Most common title of estimated user vehicle:</h3></td><td><h3>{{stattitle}}</h3></td></tr>
-      <tr bgcolor="#FFF"><td><h3>Most common number of cylinders in estimated user vehicle:</h3></td><td><h3>{{statcylinders}}</h3></td></tr>
-      <tr bgcolor="#D9D9D9"><td><h3>Most common fuel type among estimated vehicles:</h3></td><td><h3>{{statfuel}}</h3></td></tr>
-      <tr bgcolor="#FFF"><td><h3>Average mileage of estimated vehicles:</h3></td><td><h3>{{statmileage}}</h3></td></tr>
-      <tr bgcolor="#D9D9D9"><td><h3>Average price estimation of vehicles:</h3></td><td><h3>{{statestimation}}</h3></td></tr>
+      <tr bgcolor="#FFF"><td><h3>Model accuracy mean absolute error (MAE) score:</h3></td><td><h3>{{statmae}}</h3></td></tr>
+      <tr bgcolor="#D9D9D9"><td><h3>Model accuracy root mean squared error (RMSE) score:</h3></td><td><h3>{{statrmse}}</h3></td></tr>
+      <tr bgcolor="#FFF"><td><h3>Model accuracy R² score:</h3></td><td><h3>{{statr2}}</h3></td></tr>
+      <tr bgcolor="#D9D9D9"><td><h3>Number of estimations calculated with this tool:</h3></td><td><h3>{{statnumPredictions}}</h3></td></tr>
+      <tr bgcolor="#FFF"><td><h3>Top estimated car manufacturer:</h3></td><td><h3>{{statmanufacturer}}</h3></td></tr>
+      <tr bgcolor="#D9D9D9"><td><h3>Top estimated type of vehicle:</h3></td><td><h3>{{stattype}}</h3></td></tr>
+      <tr bgcolor="#FFF"><td><h3>Average year of estimated vehicles:</h3></td><td><h3>{{statyear}}</h3></td></tr>
+      <tr bgcolor="#D9D9D9"><td><h3>Most common condition of estimated user vehicle:</h3></td><td><h3>{{statcondition}}</h3></td></tr>
+      <tr bgcolor="#FFF"><td><h3>Most common title of estimated user vehicle:</h3></td><td><h3>{{stattitle}}</h3></td></tr>
+      <tr bgcolor="#D9D9D9"><td><h3>Most common number of cylinders in estimated user vehicle:</h3></td><td><h3>{{statcylinders}}</h3></td></tr>
+      <tr bgcolor="#FFF"><td><h3>Most common fuel type among estimated vehicles:</h3></td><td><h3>{{statfuel}}</h3></td></tr>
+      <tr bgcolor="#D9D9D9"><td><h3>Average mileage of estimated vehicles:</h3></td><td><h3>{{statmileage}}</h3></td></tr>
+      <tr bgcolor="#FFF"><td><h3>Average price estimation of vehicles:</h3></td><td><h3>{{statestimation}}</h3></td></tr>
     </table>
   </div>
 </div>

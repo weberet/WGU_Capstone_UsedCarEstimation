@@ -151,7 +151,8 @@ def stats():
     print(f'Average mileage of estimated vehicles: {statmileage}')
     print(f'Average price estimation of vehicles: {statestimation}')
 
-    return render_template('stats.html', statnumPredictions=statnumPredictions, statmanufacturer=statmanufacturer,
+    return render_template('stats.html', statmae=meanAbsoluteError, statrmse=rootMeanSquaredError, statr2=r2,
+                           statnumPredictions=statnumPredictions, statmanufacturer=statmanufacturer,
                            stattype=stattype, statyear=statyear, statcondition=statcondition, stattitle=stattitle,
                            statcylinders=statcylinders, statfuel=statfuel, statmileage=statmileage,
                            statestimation=statestimation)
